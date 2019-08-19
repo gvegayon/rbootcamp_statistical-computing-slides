@@ -1,0 +1,24 @@
+---
+title: "<span style='color:#E69F00'>R Bootcamp SC Slides</span>"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    seal: false
+    css: ["default", "theme.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, fig.align = "center", dpi = 320)
+library(tidyverse)
+```
+
+class: inverse, center
+
+### [01-Basics-and-functions](01_basics-and-functions/basics-and-functions/basics-and-functions.html)
+### [02-simulations](02-simulations/simulations/simulations.html)
