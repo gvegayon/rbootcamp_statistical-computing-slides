@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Simulations</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Emil Hvitfeldt" />
+    <meta name="date" content="2019-08-19" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="theme.css" type="text/css" />
+    <link rel="stylesheet" href="colors.css" type="text/css" />
+    <link rel="stylesheet" href="text-sizing.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, title-slide
+
+# Simulations
+## USC R Boot Camp: Statistical Computing
+### Emil Hvitfeldt
+### 2019-08-19
+
+---
+
+
+
+
+# Statistical distributions
+
+R has a very nice set of families of distributions. In general, distribution functions have the following name structure:
+
+- Random Number Generation: r[name-of-the-distribution], e.g. `rnorm()` for normal, `runif()` for uniform.
+- Density function: d[name-of-the-distribution], e.g. `dnorm()` for normal, `dunif()` for uniform.
+- Cumulative Distribution Function (CDF): p[name-of-the-distribution], e.g. `pnorm()` for normal, `punif()` for uniform.
+- Inverse of the CDF (quantile): q[name-of-the-distribution], e.g. `qnorm()` for the normal, `qunif()` for the uniform
+
+---
+
+# Statistical distributions
+
+
+```r
+rnorm(10)
+```
+
+```
+##  [1] -1.0225778 -0.3393304 -0.8914761  1.4078441  1.1866608 -0.8599745
+##  [7] -0.2896274 -1.9132871 -0.2261837 -0.6063149
+```
+
+```r
+rnorm(10, mean = 10)
+```
+
+```
+##  [1] 12.020030  9.505369 10.433202  8.304493 10.654220 10.550126 11.588497
+##  [8] 10.616736 10.732774 10.145752
+```
+
+See `?Distributions` for more details
+
+---
+
+# Setting the seed
+
+
+```r
+set.seed(1234)
+rnorm(10)
+```
+
+```
+##  [1] -1.2070657  0.2774292  1.0844412 -2.3456977  0.4291247  0.5060559
+##  [7] -0.5747400 -0.5466319 -0.5644520 -0.8900378
+```
+
+
+```r
+set.seed(1234)
+rnorm(10)
+```
+
+```
+##  [1] -1.2070657  0.2774292  1.0844412 -2.3456977  0.4291247  0.5060559
+##  [7] -0.5747400 -0.5466319 -0.5644520 -0.8900378
+```
+
+---
+
+# Sample
+
+
+```r
+dice &lt;- c(1, 2, 3, 4, 5, 6)
+
+sample(dice)
+```
+
+```
+## [1] 6 4 5 1 2 3
+```
+
+```r
+sample(dice, 1)
+```
+
+```
+## [1] 3
+```
+
+```r
+sample(dice, 100, replace = TRUE)
+```
+
+```
+##   [1] 4 5 2 5 2 6 3 4 4 3 1 3 6 4 2 3 2 5 6 1 6 3 6 1 5 1 1 2 1 3 2 6 3 1 3
+##  [36] 6 1 2 6 5 1 3 3 2 5 2 6 4 4 1 5 3 6 5 3 4 4 1 4 4 3 1 6 6 4 1 6 6 2 6
+##  [71] 5 5 5 1 2 6 6 2 2 5 3 4 4 3 2 4 5 2 6 6 1 3 3 1 6 6 5 1 5 1
+```
+
+---
+
+# Graphical interface
+
+
+```r
+normals &lt;- rnorm(100)
+
+plot(normals)
+
+hist(normals)
+```
+
+---
+
+# Tabulate
+
+
+```r
+dice &lt;- 1:6
+
+throws &lt;- sample(dice, 100, replace = TRUE)
+
+table(throws)
+```
+
+```
+## throws
+##  1  2  3  4  5  6 
+## 16 13 27 15 12 17
+```
+
+---
+
+# Birthday problem
+
+&gt; If you have n people, what is the properbility that at least two people have the same birthday?
+
+- What is the probability for n = 20?
+- (hard) How many people do you need for the properbilty to be 50%?
+
+Hint:
+
+use `unique()`
+
+---
+
+# Simulate pi
+
+- Sample a random point within a square going from -1 to 1 for both x and y.
+- Count if point lies within inscribed circle. (Distence between point and (0,0 ) is less then 1.)
+- Repeat
+
+The procentage of hits should approximate pi/4.
+
+hint: use `runif()` and Pythagoras' Theorem 
+
+---
+
+# Monty hall problem
+
+&gt; Suppose you're on a game show, and you're given the choice of three doors: Behind one door is a car; behind the others, goats. You pick a door, say No. 1, and the host, who knows what's behind the doors, opens another door, say No. 3, which has a goat. He then says to you, "Do you want to pick door No. 2?" Is it to your advantage to switch your choice?
+
+- How often do you win if you always pick the first door and don't switch.
+- (Hard) Write a version where you are allowed to switch.
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,578 @@
+---
+title: "Basics and Functions"
+subtitle: "USC R Boot Camp: Statistical Computing"
+author: "Emil Hvitfeldt"
+date: "2019-08-19"
+output:
+  xaringan::moon_reader:
+    css: ["default", "theme.css", "colors.css", "text-sizing.css"]
+    lib_dir: libs
+    nature:
+      beforeInit: "macros.js"
+      ratio: "16:9"
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      titleSlideClass: [center, middle]
+---
+
+```{r include=FALSE}
+library(knitr)
+hook_output <- knit_hooks$get("output")
+knit_hooks$set(output = function(x, options) {
+  lines <- options$output.lines
+  if (is.null(lines)) {
+    return(hook_output(x, options))  # pass to default hook
+  }
+  x <- unlist(strsplit(x, "\n"))
+  more <- "..."
+  if (length(lines) == 1) {        # first n lines
+    if (length(x) > lines) {
+      # truncate the output, but add ....
+      x <- c(head(x, lines), more)
+    }
+  } else {
+    x <- c(more, x[lines], more)
+  }
+  # paste these lines together
+  x <- paste(c(x, ""), collapse = "\n")
+  hook_output(x, options)
+})
+knit_hooks$set(output = function(x, options) {
+  # this hook is used only when the linewidth option is not NULL
+  if (!is.null(n <- options$linewidth)) {
+    x = knitr:::split_lines(x)
+    # any lines wider than n should be wrapped
+    if (any(nchar(x) > n)) x = strwrap(x, width = n)
+    x = paste(x, collapse = '\n')
+  }
+  hook_output(x, options)
+})
+
+opts_chunk$set(
+  echo = TRUE,
+  fig.width = 7, 
+  fig.align = 'center',
+  fig.asp = 0.618, # 1 / phi
+  out.width = "700px")
+```
+
+# Overview
+
+- Vectors
+- Subsetting
+- Functions
+- Control Structures
+
+---
+
+# Vectors
+
+We have 4 primary types of atomic vectors: logical, double, integer, and character.
+
+### Logical
+
+Can be written in full or abbreviated
+
+```{r, results='hold'}
+TRUE
+T
+FALSE
+F
+```
+
+---
+
+# Vectors
+
+We have 4 primary types of atomic vectors: logical, double, integer, and character.
+
+### doubles
+
+Can be written using decimal or scientific form
+
+```{r, results='hold'}
+1.23456
+4e3
+-2000
+1234
+```
+
+---
+
+# Vectors
+
+We have 4 primary types of atomic vectors: logical, double, integer, and character.
+
+### integers
+
+Written the same way as doubles, must be followed by a `L`
+
+```{r, results='hold'}
+1L
+35L
+5L
+1e5L
+```
+
+---
+
+# Vectors
+
+We have 4 primary types of atomic vectors: logical, double, integer, and character.
+
+### characters
+
+Strings are surrounded by `"` or `'`.
+
+```{r, results='hold'}
+"This"
+"is"
+'a'
+'string'
+```
+
+---
+
+# Lists
+
+```{r}
+list(TRUE,
+     1,
+     6L,
+     list(FALSE, FALSE))
+```
+
+---
+
+# Data.frame
+
+data.frames are a special kind of list where each element has the same length
+
+```{r}
+data.frame(number = c(1, 2, 3, 4, 5),
+           prime = c(FALSE, TRUE, TRUE, FALSE, TRUE))
+```
+
+---
+
+# Creating long vectors
+
+To create longer vectors from shorter vectors we use `c()`, short for combine.
+
+```{r}
+c(TRUE, FALSE, TRUE, TRUE, TRUE)
+c(1, 2, 5, 16, 0.25, 2.5263)
+c(1L, 2L, 3L, 4L, 5L)
+c("This", "is", "a", "vector", "of", "strings")
+```
+
+---
+
+# Assignment
+
+```{r}
+x <- 4
+y <- x
+
+x
+y
+```
+
+---
+
+# Quiz 1
+
+What  is the value of x?
+
+```{r, eval=FALSE}
+x <- 4
+y <- x
+
+y <- y + 2
+
+x
+```
+
+- 1) 4
+- 2) 6
+- 3) I don't know
+
+---
+
+# Quiz 1
+
+What  is the value of x?
+
+```{r}
+x <- 4
+y <- x
+
+y <- y + 2
+
+x
+```
+
+- **1) 4**
+- 2) 6
+- 3) I don't know
+
+---
+
+# Creating vectors - misc
+
+```{r}
+1:10
+seq(0, 100, by = 10)
+rep(1, 10)
+rep(c(1, 2, 3), 2)
+```
+
+---
+
+# Subsetting by position
+
+```{r}
+x <- c(1, 2, 3, 4, 5)
+```
+
+```{r}
+x[4]
+x[-4]
+x[2:3]
+x[c(1, 3, 5)]
+```
+
+---
+
+# Subsetting by value
+
+```{r}
+x <- c(1, 2, 3, 2, 3)
+```
+
+```{r}
+x[x < 3]
+x[x == 3]
+x[x %in% c(1, 3)]
+```
+
+
+---
+
+# Arithmetic Operators
+
+The arithmetic operators works on vectors in a "vectorized" fashion.
+`+` for addition, `-` for subtraction, `*` for multiplication and `/` for division. See more with `?Arithmetic`
+
+```{r}
+x <- c(1, 2, 3, 4, 5)
+y <- c(6, 5, 4, 3, 2)
+
+x + 1
+x + x
+x + y
+```
+
+---
+
+# Arithmetic Operators
+
+Parentases give presedence as normal
+
+```{r}
+x <- c(1, 2, 3, 4, 5)
+y <- c(6, 5, 4, 3, 2)
+
+2 + y * 2
+(2 + y) * 2
+```
+
+---
+
+# Logical Operators
+
+|Operator|Description|
+|---|---|
+|`<`|Less than|
+|`>`|Greater than|
+| `<=` |	Less than or equal to |
+| `>=` |	Greater than or equal to |
+| `==` |	Equal to |
+| `!=` |	Not equal to |
+
+---
+# Logical Operators
+
+```{r}
+3 == 5
+2 < 5
+
+runif(10) > 0.5
+```
+
+---
+
+# Vectors of different lengths
+
+```{r}
+x <- c(1, 2)
+y <- c(1, 2, 3, 4)
+```
+
+```{r, eval=FALSE}
+x + y
+```
+
+## What will happen here?
+
+---
+
+# Vectors of different lengths - Recycling
+
+```{r}
+x <- c(1, 2)
+y <- c(1, 2, 3, 4)
+```
+
+```{r}
+x + y
+```
+
+---
+
+# Coercion
+
+When you try to apply a function to a vector of the wrong type, R will try to coerce the vector to a type that will work. 
+
+The order is roughly: logical < integer < numeric < complex < character 
+
+Coercion can also be done manually with 
+
+- `as.logical()`
+- `as.integer()`
+- `as.numeric()`
+- `as.complex()`
+- `as.character()`
+
+---
+
+# Functions
+
+A function is a object like anything else in R, and is created with the `function()` function.
+Any function has 3 components; body, arguments and environment.
+
+
+```{r, eval=FALSE}
+function_name <- function(argument1, 
+                          argument2,
+                          argument3) {
+  # This is the body
+  some_calutation_are_done_here <- argument1 + argument2
+  
+  # Results are in the end
+  return(x ^ 2)
+}
+```
+
+---
+
+# Functions
+
+```{r}
+square <- function(x) {
+  return(x ^ 2)
+}
+```
+
+```{r}
+square(6)
+square(1:10)
+```
+
+---
+
+# Control structures - if else
+
+```{r, eval=FALSE}
+if (condition) true_action
+if (condition) true_action else false_action
+```
+
+```{r, eval=FALSE}
+if (condition) {
+  true_action
+}
+
+if (condition) {
+  true_action 
+} else {
+  false_action
+}
+```
+
+---
+
+# Control structures - if else
+
+```{r, eval=FALSE}
+if (2 > 5) {
+  "2 is bigger than 5"
+} else {
+  "5 is bigger than 2"
+}
+```
+
+---
+
+# Control structures - if else
+
+```{r}
+if (2 > 5) {
+  "2 is bigger than 5"
+} else {
+  "5 is bigger than 2"
+}
+```
+
+---
+
+# if else in a function
+
+```{r}
+grade <- function(x) {
+  if (x > 90) {
+    "A"
+  } else if (x > 80) {
+    "B"
+  } else if (x > 50) {
+    "C"
+  } else {
+    "F"
+  }
+}
+```
+
+```{r}
+grade(91)
+
+grade(88)
+```
+
+---
+
+# Control structures - loops
+
+You might want to do the same thing multiple times. A loop might be what you need. Make sure that the task you want to do isn't already vectorized.
+
+```{r, eval=FALSE}
+for (item in vector) {
+  perform_action
+}
+```
+
+```{r}
+for (i in 1:3) {
+  print(i)
+}
+```
+
+---
+
+# Control structures - loops
+
+```{r}
+sums <- numeric(10)
+
+for (i in seq_len(10)) { # seq_len(10) is safer than 1:10
+  sums[i] <- sum(rnorm(i))
+}
+
+sums
+```
+
+---
+
+# Function Programming
+
+- Use of functions
+- No side effects
+
+--
+
+## *apply functions
+
+--
+
+## purrr package
+
+---
+
+# *apply
+
+```{r}
+sums <- numeric(10)
+
+for (i in seq_len(10)) { # seq_len(10) is safer than 1:10
+  sums[i] <- sum(rnorm(i))
+}
+
+sums
+```
+
+---
+
+# *apply
+
+There are many apply functions, you should focus on `lapply()` and `vapply()`
+
+```{r}
+sum_fun <- function(x) sum(rnorm(x))
+lapply(seq_len(10), sum_fun)
+```
+
+---
+
+# *apply
+
+There are many apply functions, you should focus on `lapply()` and `vapply()`
+
+```{r}
+sum_fun <- function(x) sum(rnorm(x))
+vapply(seq_len(10), sum_fun, numeric(1))
+```
+
+---
+
+# purrr package  <img src="logo.png" align="right" />
+
+## *apply version
+```{r, eval=FALSE}
+sum_fun <- function(x) sum(rnorm(x))
+lapply(seq_len(10), sum_fun)
+```
+
+## purrr version
+```{r, eval=FALSE}
+library(purrr)
+
+map(seq_len(10), ~sum(rnorm(.x)))
+```
+
+---
+
+# purrr package  <img src="logo.png" align="right" />
+
+## *apply version
+```{r, eval=FALSE}
+sum_fun <- function(x) sum(rnorm(x))
+vapply(seq_len(10), sum_fun, numeric(1))
+```
+
+## purrr version
+```{r, eval=FALSE}
+library(purrr)
+
+map_dbl(seq_len(10), ~sum(rnorm(.x)))
+```
+

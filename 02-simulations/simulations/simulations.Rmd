@@ -1,0 +1,164 @@
+---
+title: "Simulations"
+subtitle: "USC R Boot Camp: Statistical Computing"
+author: "Emil Hvitfeldt"
+date: "2019-08-19"
+output:
+  xaringan::moon_reader:
+    css: ["default", "theme.css", "colors.css", "text-sizing.css"]
+    lib_dir: libs
+    nature:
+      beforeInit: "macros.js"
+      ratio: "16:9"
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      titleSlideClass: [center, middle]
+---
+
+```{r include=FALSE}
+library(knitr)
+hook_output <- knit_hooks$get("output")
+knit_hooks$set(output = function(x, options) {
+  lines <- options$output.lines
+  if (is.null(lines)) {
+    return(hook_output(x, options))  # pass to default hook
+  }
+  x <- unlist(strsplit(x, "\n"))
+  more <- "..."
+  if (length(lines) == 1) {        # first n lines
+    if (length(x) > lines) {
+      # truncate the output, but add ....
+      x <- c(head(x, lines), more)
+    }
+  } else {
+    x <- c(more, x[lines], more)
+  }
+  # paste these lines together
+  x <- paste(c(x, ""), collapse = "\n")
+  hook_output(x, options)
+})
+knit_hooks$set(output = function(x, options) {
+  # this hook is used only when the linewidth option is not NULL
+  if (!is.null(n <- options$linewidth)) {
+    x = knitr:::split_lines(x)
+    # any lines wider than n should be wrapped
+    if (any(nchar(x) > n)) x = strwrap(x, width = n)
+    x = paste(x, collapse = '\n')
+  }
+  hook_output(x, options)
+})
+
+opts_chunk$set(
+  echo = TRUE,
+  fig.width = 7, 
+  fig.align = 'center',
+  fig.asp = 0.618, # 1 / phi
+  out.width = "700px")
+```
+
+# Statistical distributions
+
+R has a very nice set of families of distributions. In general, distribution functions have the following name structure:
+
+- Random Number Generation: r[name-of-the-distribution], e.g. `rnorm()` for normal, `runif()` for uniform.
+- Density function: d[name-of-the-distribution], e.g. `dnorm()` for normal, `dunif()` for uniform.
+- Cumulative Distribution Function (CDF): p[name-of-the-distribution], e.g. `pnorm()` for normal, `punif()` for uniform.
+- Inverse of the CDF (quantile): q[name-of-the-distribution], e.g. `qnorm()` for the normal, `qunif()` for the uniform
+
+---
+
+# Statistical distributions
+
+```{r}
+rnorm(10)
+rnorm(10, mean = 10)
+```
+
+See `?Distributions` for more details
+
+---
+
+# Setting the seed
+
+```{r}
+set.seed(1234)
+rnorm(10)
+```
+
+```{r}
+set.seed(1234)
+rnorm(10)
+```
+
+---
+
+# Sample
+
+```{r}
+dice <- c(1, 2, 3, 4, 5, 6)
+
+sample(dice)
+
+sample(dice, 1)
+
+sample(dice, 100, replace = TRUE)
+```
+
+---
+
+# Graphical interface
+
+```{r, eval=FALSE}
+normals <- rnorm(100)
+
+plot(normals)
+
+hist(normals)
+```
+
+---
+
+# Tabulate
+
+```{r}
+dice <- 1:6
+
+throws <- sample(dice, 100, replace = TRUE)
+
+table(throws)
+```
+
+---
+
+# Birthday problem
+
+> If you have n people, what is the properbility that at least two people have the same birthday?
+
+- What is the probability for n = 20?
+- (hard) How many people do you need for the properbilty to be 50%?
+
+Hint:
+
+use `unique()`
+
+---
+
+# Simulate pi
+
+- Sample a random point within a square going from -1 to 1 for both x and y.
+- Count if point lies within inscribed circle. (Distence between point and (0,0 ) is less then 1.)
+- Repeat
+
+The procentage of hits should approximate pi/4.
+
+hint: use `runif()` and Pythagoras' Theorem 
+
+---
+
+# Monty hall problem
+
+> Suppose you're on a game show, and you're given the choice of three doors: Behind one door is a car; behind the others, goats. You pick a door, say No. 1, and the host, who knows what's behind the doors, opens another door, say No. 3, which has a goat. He then says to you, "Do you want to pick door No. 2?" Is it to your advantage to switch your choice?
+
+- How often do you win if you always pick the first door and don't switch.
+- (Hard) Write a version where you are allowed to switch.
