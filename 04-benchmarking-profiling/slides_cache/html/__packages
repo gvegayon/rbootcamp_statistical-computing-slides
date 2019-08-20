@@ -1,0 +1,10 @@
+base
+devtools
+usethis
+fs
+knitr
+tictoc
+bench
+magrittr
+ggplot2
+webshot
