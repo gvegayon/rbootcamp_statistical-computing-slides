@@ -22,4 +22,5 @@ class: inverse, center
 
 ### [01-Basics-and-functions](01_basics-and-functions/basics-and-functions/basics-and-functions.html)
 ### [02-simulations](02-simulations/simulations/simulations.html)
+### [03-(The)-Matrix](03-matrix/matrix.html)
 ### [04-benchmarking-profiling](04-benchmarking-profiling/slides.html)
