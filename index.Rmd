@@ -25,4 +25,4 @@ class: inverse, center
 ### [03-(The)-Matrix](03-matrix/matrix.html)
 ### [04-benchmarking-profiling](04-benchmarking-profiling/slides.html)
 ### [05-rcpp](05-rcpp/rcpp.html)
-### [06-rcpp](06-rcpp/parallel.html)
+### [06-rcpp](06-parallel/parallel.html)
